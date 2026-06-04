@@ -122,6 +122,11 @@ const WatchPage = () => {
                                 allowFullScreen
                                 title="Trailer"
                             ></iframe>
+                        ) : (!currentEpisodeData.link_embed && !currentEpisodeData.link_m3u8) ? (
+                            <div style={{ color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', flexDirection: 'column', gap: '10px' }}>
+                                <h3 style={{ margin: 0 }}>Tập phim này đang bị lỗi</h3>
+                                <p style={{ margin: 0, color: '#94a3b8' }}>Link video chưa được cập nhật từ máy chủ. Vui lòng thử lại sau.</p>
+                            </div>
                         ) : useIframe || !currentEpisodeData.link_m3u8 ? (
                             <iframe 
                                 src={currentEpisodeData.link_embed} 

@@ -48,7 +48,9 @@ const DetailPage = () => {
 
     const { movie, episodes } = movieData;
     const isTrailer = movie.episode_current === 'Trailer' || movie.status === 'trailer';
-    const firstEpisode = episodes?.[0]?.server_data?.[0]?.name;
+    const firstEpisodeData = episodes?.[0]?.server_data?.[0];
+    const firstEpisodeName = firstEpisodeData?.name;
+    const hasVideoLink = firstEpisodeData && (firstEpisodeData.link_m3u8 || firstEpisodeData.link_embed);
 
     return (
         <div className="detail-page">
@@ -96,10 +98,10 @@ const DetailPage = () => {
                     <div className="movie-description" dangerouslySetInnerHTML={{ __html: movie.content }} />
 
                     <div className="action-buttons">
-                        {!isTrailer && firstEpisode ? (
+                        {!isTrailer && hasVideoLink ? (
                             <button 
                                 className="action-btn play-btn" 
-                                onClick={() => navigate(`/xem-phim/${slug}/${encodeURIComponent(firstEpisode)}`)}
+                                onClick={() => navigate(`/xem-phim/${slug}/${encodeURIComponent(firstEpisodeName)}`)}
                             >
                                 <Play fill="currentColor" size={20} />
                                 Xem Phim

@@ -26,7 +26,14 @@ const HomePage = () => {
     // States for generic search/category views
     const [genericMovies, setGenericMovies] = useState({ items: [], pathImage: '', title: '' });
 
-    const filterMovies = (items) => items ? items.filter(m => m.episode_current?.toLowerCase() !== 'trailer' && m.status?.toLowerCase() !== 'trailer') : [];
+    const filterMovies = (items) => items ? items.filter(m => {
+        const ep = m.episode_current?.toLowerCase() || '';
+        const status = m.status?.toLowerCase() || '';
+        // Loại bỏ các phim là trailer, sắp chiếu, chưa có tập nào
+        if (ep.includes('trailer') || status === 'trailer') return false;
+        if (ep.includes('đang cập nhật') || ep === 'tập 0' || ep === '0') return false;
+        return true;
+    }) : [];
 
     const fetchSection = async (url, isV1Api = true) => {
         try {

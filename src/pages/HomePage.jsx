@@ -4,7 +4,8 @@ import { useSearchParams } from 'react-router-dom';
 import './HomePage.css';
 import { OPHIM_BASE_URL } from '../config';
 import HeroBanner from '../components/HeroBanner';
-import MovieSlider from '../components/MovieSlider';
+import MovieSection from '../components/MovieSection';
+import SidebarRanking from '../components/SidebarRanking';
 
 const HomePage = () => {
     const [searchParams] = useSearchParams();
@@ -166,13 +167,46 @@ const HomePage = () => {
                 />
             )}
             
-            <div className="sliders-container">
-                <MovieSlider title="Phim Mới Nổi Bật" movies={newMovies.items} pathImage={newMovies.pathImage} isVertical={true} titleColor="#e2e8f0" />
-                <MovieSlider title="Tuyệt Đỉnh Phim Hàn" movies={koreanMovies.items} pathImage={koreanMovies.pathImage} titleColor="#f43f5e" />
-                <MovieSlider title="Cổ Trang Hoa Ngữ" movies={chineseMovies.items} pathImage={chineseMovies.pathImage} titleColor="#eab308" />
-                <MovieSlider title="Bom Tấn Hollywood" movies={usMovies.items} pathImage={usMovies.pathImage} titleColor="#38bdf8" />
-                <MovieSlider title="Hành Động Nghẹt Thở" movies={actionMovies.items} pathImage={actionMovies.pathImage} titleColor="#22c55e" />
-                <MovieSlider title="Tình Cảm Lãng Mạn" movies={romanticMovies.items} pathImage={romanticMovies.pathImage} titleColor="#ec4899" />
+            <div className="homepage-content-wrapper">
+                <div className="main-content">
+                    <MovieSection 
+                        title="Phim Lẻ Mới" 
+                        movies={usMovies.items} 
+                        pathImage={usMovies.pathImage} 
+                        titleColor="#f97316"
+                        viewAllLink="/tim-kiem?list=phim-le"
+                    />
+                    <MovieSection 
+                        title="Phim Bộ Mới" 
+                        movies={koreanMovies.items} 
+                        pathImage={koreanMovies.pathImage} 
+                        titleColor="#3b82f6"
+                        viewAllLink="/tim-kiem?list=phim-bo"
+                    />
+                    <MovieSection 
+                        title="Phim Hành Động" 
+                        movies={actionMovies.items} 
+                        pathImage={actionMovies.pathImage} 
+                        titleColor="#10b981"
+                        viewAllLink="/tim-kiem?category=hanh-dong"
+                    />
+                    <MovieSection 
+                        title="Cổ Trang Hoa Ngữ" 
+                        movies={chineseMovies.items} 
+                        pathImage={chineseMovies.pathImage} 
+                        titleColor="#eab308"
+                        viewAllLink="/tim-kiem?category=co-trang"
+                    />
+                </div>
+                
+                <div className="sidebar-content">
+                    <SidebarRanking 
+                        title="Phim Hot Trong Tuần" 
+                        movies={romanticMovies.items} 
+                        pathImage={romanticMovies.pathImage}
+                        titleColor="#ec4899"
+                    />
+                </div>
             </div>
         </div>
     );

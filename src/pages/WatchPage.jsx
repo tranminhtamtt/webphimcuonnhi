@@ -37,6 +37,11 @@ const WatchPage = () => {
     // 2. useEffect xử lý sự kiện bấm phím mũi tên để tua 5 giây
     useEffect(() => {
         const handleKeyDown = (e) => {
+            // Bỏ qua nếu người dùng đang nhập liệu (ví dụ: ô tìm kiếm)
+            if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName) || e.target.isContentEditable) {
+                return;
+            }
+
             // Tìm thẻ video trên màn hình
             const videoElement = document.querySelector('video'); 
             if (!videoElement) return;

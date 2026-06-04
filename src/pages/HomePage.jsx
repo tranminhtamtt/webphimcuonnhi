@@ -27,12 +27,14 @@ const HomePage = () => {
     const [genericMovies, setGenericMovies] = useState({ items: [], pathImage: '', title: '' });
 
     const filterMovies = (items) => items ? items.filter(m => {
-        const ep = m.episode_current?.toLowerCase() || '';
-        const status = m.status?.toLowerCase() || '';
-        // Loại bỏ các phim là trailer, sắp chiếu, chưa có tập nào hoặc lỗi dữ liệu (trống)
-        if (!ep || ep === 'null' || ep === 'undefined') return false;
+        // Một số API cũ không trả về episode_current (ví dụ: phim mới cập nhật), 
+        // nên ta mặc định chuỗi rỗng để không bị lọc nhầm.
+        const ep = (m.episode_current || '').toLowerCase();
+        const status = (m.status || '').toLowerCase();
+        
         if (ep.includes('trailer') || status === 'trailer') return false;
         if (ep.includes('đang cập nhật') || ep === 'tập 0' || ep === '0') return false;
+        
         return true;
     }) : [];
 

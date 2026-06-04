@@ -29,7 +29,8 @@ const HomePage = () => {
     const filterMovies = (items) => items ? items.filter(m => {
         const ep = m.episode_current?.toLowerCase() || '';
         const status = m.status?.toLowerCase() || '';
-        // Loại bỏ các phim là trailer, sắp chiếu, chưa có tập nào
+        // Loại bỏ các phim là trailer, sắp chiếu, chưa có tập nào hoặc lỗi dữ liệu (trống)
+        if (!ep || ep === 'null' || ep === 'undefined') return false;
         if (ep.includes('trailer') || status === 'trailer') return false;
         if (ep.includes('đang cập nhật') || ep === 'tập 0' || ep === '0') return false;
         return true;

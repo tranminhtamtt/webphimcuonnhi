@@ -37,20 +37,20 @@ const DetailPage = () => {
         );
     }
 
-    if (!movieData || !movieData.movie) {
+    const { movie, episodes } = movieData || {};
+    const isTrailer = movie?.episode_current === 'Trailer' || movie?.status === 'trailer';
+    const firstEpisodeData = episodes?.[0]?.server_data?.[0];
+    const firstEpisodeName = firstEpisodeData?.name;
+    const hasVideoLink = firstEpisodeData && (firstEpisodeData.link_m3u8 || firstEpisodeData.link_embed);
+
+    if (!movieData || !movie || (!isTrailer && !hasVideoLink && !movie.trailer_url)) {
         return (
             <div className="error-container">
-                <h2>Không tìm thấy phim này!</h2>
+                <h2>Phim này hiện đang bị lỗi hoặc chưa có tập phim nào!</h2>
                 <Link to="/" className="back-btn"><ChevronLeft /> Về trang chủ</Link>
             </div>
         );
     }
-
-    const { movie, episodes } = movieData;
-    const isTrailer = movie.episode_current === 'Trailer' || movie.status === 'trailer';
-    const firstEpisodeData = episodes?.[0]?.server_data?.[0];
-    const firstEpisodeName = firstEpisodeData?.name;
-    const hasVideoLink = firstEpisodeData && (firstEpisodeData.link_m3u8 || firstEpisodeData.link_embed);
 
     return (
         <div className="detail-page">

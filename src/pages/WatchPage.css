@@ -83,16 +83,20 @@
     background: #000;
     display: flex;
     justify-content: center;
+    padding: 30px 0; /* Thêm khoảng cách trên dưới cho đỡ sát */
 }
 
 .video-wrapper {
     position: relative;
     width: 100%;
-    max-width: 1400px;
+    /* Giới hạn chiều rộng tối đa, và đảm bảo chiều cao không vượt quá 75% màn hình (75vh) */
+    max-width: min(1200px, calc(75vh * 16 / 9));
     aspect-ratio: 16/9;
+    background: #000;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5); /* Thêm bóng cho player nổi bật hơn */
 }
 
-.video-wrapper iframe {
+.video-wrapper iframe, .video-wrapper > div, .plyr {
     position: absolute;
     top: 0;
     left: 0;

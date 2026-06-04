@@ -274,3 +274,19 @@
         width: 300px;
     }
 }
+
+@media (max-width: 480px) {
+    .nav-logo {
+        font-size: 1.2rem;
+    }
+    .nav-search {
+        width: 100%;
+    }
+    .search-input {
+        max-width: 200px;
+    }
+    .search-dropdown {
+        width: 100%;
+        right: 0;
+    }
+}

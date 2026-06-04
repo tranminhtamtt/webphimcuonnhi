@@ -84,3 +84,25 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+@media (max-width: 768px) {
+    .generic-view {
+        padding-top: 80px;
+    }
+    .movies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 15px;
+        padding: 10px 20px !important;
+    }
+    .section-title {
+        margin-top: 20px !important;
+        margin-left: 20px !important;
+        font-size: 1.2rem;
+    }
+    .movie-info {
+        padding: 10px;
+    }
+    .movie-name {
+        font-size: 0.9rem;
+    }
+}

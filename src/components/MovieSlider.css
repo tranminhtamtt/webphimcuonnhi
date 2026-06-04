@@ -187,3 +187,22 @@
         display: none;
     }
 }
+
+@media (max-width: 480px) {
+    .slider-title {
+        font-size: 1.1rem;
+        padding-left: 15px;
+    }
+    .slider-track {
+        padding: 10px 15px 20px 15px;
+    }
+    .slider-horizontal .slider-card {
+        width: 160px;
+    }
+    .slider-vertical .slider-card {
+        width: 110px;
+    }
+    .slider-info h3 {
+        font-size: 0.85rem;
+    }
+}

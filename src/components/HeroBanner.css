@@ -149,3 +149,29 @@
         font-size: 1rem;
     }
 }
+
+@media (max-width: 480px) {
+    .hero-carousel {
+        height: 55vh;
+        min-height: 400px;
+    }
+    .hero-carousel-title {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+    .hero-carousel-desc {
+        font-size: 0.95rem;
+        margin-bottom: 20px;
+    }
+    .hero-badge {
+        font-size: 1rem;
+        margin-bottom: 5px;
+    }
+    .hero-btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+    .hero-dots {
+        bottom: 40px;
+    }
+}

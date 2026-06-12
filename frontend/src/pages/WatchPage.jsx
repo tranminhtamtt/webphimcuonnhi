@@ -16,7 +16,7 @@ const WatchPage = () => {
     const [initialTime, setInitialTime] = useState(0);
 
     const { token } = useContext(AuthContext);
-    const lastSaveTimeRef = useRef(0);
+    const lastSaveTimeRef = useRef(Date.now());
 
     const decodedEpisode = decodeURIComponent(episode);
 
@@ -60,6 +60,9 @@ const WatchPage = () => {
     // Lưu tiến trình xem phim (debounce 10s)
     const handleTimeUpdate = async (currentTime, duration) => {
         if (!token || !movieData || !movieData.movie) return;
+        
+        // Prevent saving 0 if initialTime is set but video hasn't seeked yet
+        if (currentTime === 0) return;
         
         // Chỉ lưu nếu đã qua 10 giây kể từ lần lưu trước
         const now = Date.now();

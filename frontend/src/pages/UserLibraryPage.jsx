@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { BACKEND_URL } from '../config';
 import { AuthContext } from '../context/AuthContext';
@@ -9,8 +9,10 @@ import './UserLibraryPage.css';
 const UserLibraryPage = () => {
     const { token, user } = useContext(AuthContext);
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const tabParam = searchParams.get('tab');
     
-    const [activeTab, setActiveTab] = useState('watching'); // 'watching' or 'favorites'
+    const [activeTab, setActiveTab] = useState(tabParam === 'favorites' ? 'favorites' : 'watching');
     const [watchingList, setWatchingList] = useState([]);
     const [favoritesList, setFavoritesList] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -39,6 +41,12 @@ const UserLibraryPage = () => {
 
         fetchData();
     }, [token, navigate]);
+
+    useEffect(() => {
+        if (tabParam === 'favorites' || tabParam === 'watching') {
+            setActiveTab(tabParam);
+        }
+    }, [tabParam]);
 
     const formatTime = (seconds) => {
         if (!seconds) return '00:00';

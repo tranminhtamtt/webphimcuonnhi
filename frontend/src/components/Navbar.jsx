@@ -211,10 +211,10 @@ const Navbar = () => {
                             
                             {isUserDropdownOpen && (
                                 <div className="user-dropdown-menu">
-                                    <Link to="/thu-vien" className="user-dropdown-item">
+                                    <Link to="/thu-vien?tab=watching" className="user-dropdown-item">
                                         <Clock size={16} /> Phim Đang Xem Giở
                                     </Link>
-                                    <Link to="/thu-vien" className="user-dropdown-item">
+                                    <Link to="/thu-vien?tab=favorites" className="user-dropdown-item">
                                         <Heart size={16} /> Phim Đã Thích
                                     </Link>
                                     <div className="dropdown-divider"></div>

@@ -5,6 +5,11 @@ import 'plyr/dist/plyr.css';
 
 const CustomPlayer = ({ src, poster, onTimeUpdate, initialTime }) => {
     const videoRef = useRef(null);
+    const initialTimeRef = useRef(initialTime);
+
+    useEffect(() => {
+        initialTimeRef.current = initialTime;
+    }, [initialTime]);
 
     useEffect(() => {
         const video = videoRef.current;
@@ -58,8 +63,8 @@ const CustomPlayer = ({ src, poster, onTimeUpdate, initialTime }) => {
 
         // Set initial time if provided
         const handleLoadedMetadata = () => {
-            if (initialTime && video.currentTime === 0) {
-                video.currentTime = initialTime;
+            if (initialTimeRef.current > 0) {
+                video.currentTime = initialTimeRef.current;
             }
         };
 

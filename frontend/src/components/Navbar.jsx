@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { Search, ChevronDown, Film, User, LogOut } from 'lucide-react';
+import { Search, ChevronDown, Film, User, LogOut, Heart, Clock } from 'lucide-react';
 import { OPHIM_BASE_URL } from '../config';
 import { AuthContext } from '../context/AuthContext';
 import AuthModal from './AuthModal';
@@ -42,6 +42,7 @@ const Navbar = () => {
 
     const { user, logout } = useContext(AuthContext);
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+    const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
 
     // Handle scroll effect
     useEffect(() => {
@@ -199,13 +200,29 @@ const Navbar = () => {
 
                 <div className="nav-auth">
                     {user ? (
-                        <div className="nav-user-dropdown">
+                        <div 
+                            className="nav-user-dropdown-container" 
+                            onMouseEnter={() => setIsUserDropdownOpen(true)}
+                            onMouseLeave={() => setIsUserDropdownOpen(false)}
+                        >
                             <span className="nav-user-email">
-                                <User size={18} /> {user.email.split('@')[0]}
+                                <User size={18} /> {user.email.split('@')[0]} <ChevronDown size={14} />
                             </span>
-                            <button onClick={logout} className="nav-logout-btn" title="Đăng xuất">
-                                <LogOut size={18} />
-                            </button>
+                            
+                            {isUserDropdownOpen && (
+                                <div className="user-dropdown-menu">
+                                    <Link to="/thu-vien" className="user-dropdown-item">
+                                        <Clock size={16} /> Phim Đang Xem Giở
+                                    </Link>
+                                    <Link to="/thu-vien" className="user-dropdown-item">
+                                        <Heart size={16} /> Phim Đã Thích
+                                    </Link>
+                                    <div className="dropdown-divider"></div>
+                                    <button onClick={logout} className="user-dropdown-item text-danger">
+                                        <LogOut size={16} /> Đăng Xuất
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     ) : (
                         <button className="nav-login-btn" onClick={() => setIsAuthModalOpen(true)}>

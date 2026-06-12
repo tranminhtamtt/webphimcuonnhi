@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import './HomePage.css';
 import { OPHIM_BASE_URL } from '../config';
 import HeroBanner from '../components/HeroBanner';
@@ -139,7 +139,7 @@ const HomePage = () => {
                 ) : (
                     <div className="movies-grid" style={{ padding: '20px 40px' }}>
                         {genericMovies.items.map(movie => (
-                            <a href={`/phim/${movie.slug}`} className="movie-card" key={movie._id}>
+                            <Link to={`/phim/${movie.slug}`} className="movie-card" key={movie._id}>
                                 <div className="card-img-wrapper">
                                     <img 
                                         src={movie.thumb_url?.startsWith('http') ? movie.thumb_url : `${genericMovies.pathImage}${movie.thumb_url}`} 
@@ -150,7 +150,7 @@ const HomePage = () => {
                                 <div className="movie-info">
                                     <h3 className="movie-name">{movie.name}</h3>
                                 </div>
-                            </a>
+                            </Link>
                         ))}
                     </div>
                 )}

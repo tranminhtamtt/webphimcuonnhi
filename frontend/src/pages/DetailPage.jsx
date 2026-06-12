@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { OPHIM_BASE_URL } from '../config';
-import { ChevronLeft, Play, Calendar, Clock, Film, Video } from 'lucide-react';
+import { OPHIM_BASE_URL, BACKEND_URL } from '../config';
+import { ChevronLeft, Play, Calendar, Clock, Film, Video, Heart } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
 import './DetailPage.css';
 
 const DetailPage = () => {
@@ -10,6 +11,8 @@ const DetailPage = () => {
     const navigate = useNavigate();
     const [movieData, setMovieData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isFavorite, setIsFavorite] = useState(false);
+    const { token } = useContext(AuthContext);
 
     useEffect(() => {
         const fetchMovieDetail = async () => {
@@ -25,8 +28,40 @@ const DetailPage = () => {
             }
         };
 
+        const checkFavorite = async () => {
+            if (!token) return;
+            try {
+                const response = await axios.get(`${BACKEND_URL}/favorites/check/${slug}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setIsFavorite(response.data.isFavorite);
+            } catch (error) {
+                console.error("Error checking favorite:", error);
+            }
+        };
+
         fetchMovieDetail();
-    }, [slug]);
+        checkFavorite();
+    }, [slug, token]);
+
+    const handleToggleFavorite = async () => {
+        if (!token) {
+            alert('Vui lòng đăng nhập để thêm vào danh sách yêu thích!');
+            return;
+        }
+        try {
+            const response = await axios.post(`${BACKEND_URL}/favorites/toggle`, {
+                movieSlug: slug,
+                movieName: movieData.movie.name,
+                posterUrl: movieData.movie.poster_url || movieData.movie.thumb_url
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setIsFavorite(response.data.isFavorite);
+        } catch (error) {
+            console.error("Error toggling favorite:", error);
+        }
+    };
 
     if (loading) {
         return (
@@ -117,6 +152,18 @@ const DetailPage = () => {
                                 Xem Trailer
                             </a>
                         ) : null}
+                        
+                        <button 
+                            className={`action-btn favorite-btn ${isFavorite ? 'active' : ''}`}
+                            onClick={handleToggleFavorite}
+                            style={{ 
+                                backgroundColor: isFavorite ? '#ef4444' : 'rgba(255, 255, 255, 0.1)',
+                                borderColor: isFavorite ? '#ef4444' : 'rgba(255, 255, 255, 0.2)'
+                            }}
+                        >
+                            <Heart size={20} fill={isFavorite ? "currentColor" : "none"} />
+                            {isFavorite ? 'Đã Thích' : 'Yêu Thích'}
+                        </button>
                     </div>
 
                     {!isTrailer && episodes && episodes.length > 0 && episodes[0].server_data && episodes[0].server_data.length > 1 && (

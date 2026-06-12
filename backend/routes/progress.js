@@ -29,32 +29,38 @@ router.post('/', authenticate, async (req, res) => {
         const { userId } = req.user;
         const { movieSlug, movieName, episodeSlug, episodeName, currentTime, duration, posterUrl } = req.body;
 
-        const progress = await prisma.watchProgress.upsert({
-            where: {
-                userId_movieSlug: {
-                    userId,
-                    movieSlug
-                }
-            },
-            update: {
-                episodeSlug,
-                episodeName,
-                currentTime,
-                duration,
-                posterUrl,
-                updatedAt: new Date()
-            },
-            create: {
-                userId,
-                movieSlug,
-                movieName,
-                episodeSlug,
-                episodeName,
-                currentTime,
-                duration,
-                posterUrl
-            }
+        // Use findFirst then update to avoid unique constraint issues if duplicates exist
+        let progress = await prisma.watchProgress.findFirst({
+            where: { userId, movieSlug },
+            orderBy: { updatedAt: 'desc' }
         });
+
+        if (progress) {
+            progress = await prisma.watchProgress.update({
+                where: { id: progress.id },
+                update: {
+                    episodeSlug,
+                    episodeName,
+                    currentTime,
+                    duration,
+                    posterUrl,
+                    updatedAt: new Date()
+                }
+            });
+        } else {
+            progress = await prisma.watchProgress.create({
+                data: {
+                    userId,
+                    movieSlug,
+                    movieName,
+                    episodeSlug,
+                    episodeName,
+                    currentTime,
+                    duration,
+                    posterUrl
+                }
+            });
+        }
 
         res.json(progress);
     } catch (error) {
@@ -71,7 +77,16 @@ router.get('/', authenticate, async (req, res) => {
             where: { userId },
             orderBy: { updatedAt: 'desc' }
         });
-        res.json(progress);
+        
+        const uniqueProgress = [];
+        const seenSlugs = new Set();
+        for (const p of progress) {
+            if (!seenSlugs.has(p.movieSlug)) {
+                seenSlugs.add(p.movieSlug);
+                uniqueProgress.push(p);
+            }
+        }
+        res.json(uniqueProgress);
     } catch (error) {
         res.status(500).json({ error: 'Lỗi khi lấy tiến trình' });
     }
@@ -83,13 +98,9 @@ router.get('/:movieSlug', authenticate, async (req, res) => {
         const { userId } = req.user;
         const { movieSlug } = req.params;
         
-        const progress = await prisma.watchProgress.findUnique({
-            where: {
-                userId_movieSlug: {
-                    userId,
-                    movieSlug
-                }
-            }
+        const progress = await prisma.watchProgress.findFirst({
+            where: { userId, movieSlug },
+            orderBy: { updatedAt: 'desc' }
         });
         
         res.json(progress);

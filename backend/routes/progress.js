@@ -38,7 +38,7 @@ router.post('/', authenticate, async (req, res) => {
         if (progress) {
             progress = await prisma.watchProgress.update({
                 where: { id: progress.id },
-                update: {
+                data: {
                     episodeSlug,
                     episodeName,
                     currentTime,

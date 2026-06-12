@@ -9,6 +9,12 @@ const CustomPlayer = ({ src, poster, onTimeUpdate, initialTime }) => {
 
     useEffect(() => {
         initialTimeRef.current = initialTime;
+        if (initialTime > 0 && videoRef.current && videoRef.current.readyState >= 1) {
+            // Nếu video đã load xong metadata nhưng API trả về delay, ta tua ngay lập tức
+            if (videoRef.current.currentTime < initialTime) {
+                videoRef.current.currentTime = initialTime;
+            }
+        }
     }, [initialTime]);
 
     useEffect(() => {

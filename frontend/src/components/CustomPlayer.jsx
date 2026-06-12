@@ -3,7 +3,7 @@ import Hls from 'hls.js';
 import Plyr from 'plyr';
 import 'plyr/dist/plyr.css';
 
-const CustomPlayer = ({ src, poster }) => {
+const CustomPlayer = ({ src, poster, onTimeUpdate, initialTime }) => {
     const videoRef = useRef(null);
 
     useEffect(() => {
@@ -56,7 +56,25 @@ const CustomPlayer = ({ src, poster }) => {
             player = new Plyr(video, defaultOptions);
         }
 
+        // Set initial time if provided
+        const handleLoadedMetadata = () => {
+            if (initialTime && video.currentTime === 0) {
+                video.currentTime = initialTime;
+            }
+        };
+
+        const handleTimeUpdate = () => {
+            if (onTimeUpdate) {
+                onTimeUpdate(video.currentTime, video.duration);
+            }
+        };
+
+        video.addEventListener('loadedmetadata', handleLoadedMetadata);
+        video.addEventListener('timeupdate', handleTimeUpdate);
+
         return () => {
+            video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+            video.removeEventListener('timeupdate', handleTimeUpdate);
             if (hls) hls.destroy();
             if (player) player.destroy();
         };

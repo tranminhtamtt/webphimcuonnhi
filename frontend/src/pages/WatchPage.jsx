@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { OPHIM_BASE_URL } from '../config';
+import { OPHIM_BASE_URL, BACKEND_URL } from '../config';
 import { ChevronLeft, Play, MonitorPlay } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
 import CustomPlayer from '../components/CustomPlayer';
 import './WatchPage.css';
 
@@ -12,6 +13,10 @@ const WatchPage = () => {
     const [movieData, setMovieData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [useIframe, setUseIframe] = useState(false);
+    const [initialTime, setInitialTime] = useState(0);
+
+    const { token } = useContext(AuthContext);
+    const lastSaveTimeRef = useRef(0);
 
     const decodedEpisode = decodeURIComponent(episode);
 
@@ -33,6 +38,51 @@ const WatchPage = () => {
 
         fetchMovieDetail();
     }, [slug]);
+
+    // Lấy tiến trình xem phim nếu đã đăng nhập
+    useEffect(() => {
+        if (!token) return;
+        const fetchProgress = async () => {
+            try {
+                const response = await axios.get(`${BACKEND_URL}/progress/${slug}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                if (response.data && response.data.episodeSlug === episode) {
+                    setInitialTime(response.data.currentTime);
+                }
+            } catch (error) {
+                console.error("Error fetching watch progress:", error);
+            }
+        };
+        fetchProgress();
+    }, [slug, episode, token]);
+
+    // Lưu tiến trình xem phim (debounce 10s)
+    const handleTimeUpdate = async (currentTime, duration) => {
+        if (!token || !movieData || !movieData.movie) return;
+        
+        // Chỉ lưu nếu đã qua 10 giây kể từ lần lưu trước
+        const now = Date.now();
+        if (now - lastSaveTimeRef.current < 10000) return;
+        
+        lastSaveTimeRef.current = now;
+
+        try {
+            await axios.post(`${BACKEND_URL}/progress`, {
+                movieSlug: slug,
+                movieName: movieData.movie.name,
+                episodeSlug: episode,
+                episodeName: decodedEpisode,
+                currentTime,
+                duration,
+                posterUrl: movieData.movie.poster_url || movieData.movie.thumb_url
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+        } catch (error) {
+            console.error("Error saving progress:", error);
+        }
+    };
 
     // 2. useEffect xử lý sự kiện bấm phím mũi tên để tua 5 giây
     useEffect(() => {
@@ -139,6 +189,8 @@ const WatchPage = () => {
                                 key={currentEpisodeData.link_m3u8}
                                 src={currentEpisodeData.link_m3u8} 
                                 poster={movie.poster_url || movie.thumb_url} 
+                                initialTime={initialTime}
+                                onTimeUpdate={handleTimeUpdate}
                             />
                         )}
                     </div>

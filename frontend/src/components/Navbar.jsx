@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { Search, ChevronDown, Film } from 'lucide-react';
+import { Search, ChevronDown, Film, User, LogOut } from 'lucide-react';
 import { OPHIM_BASE_URL } from '../config';
+import { AuthContext } from '../context/AuthContext';
+import AuthModal from './AuthModal';
 import './Navbar.css';
 
 const CATEGORIES = [
@@ -37,6 +39,9 @@ const Navbar = () => {
     const searchRef = useRef(null);
     const navigate = useNavigate();
     const location = useLocation();
+
+    const { user, logout } = useContext(AuthContext);
+    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
     // Handle scroll effect
     useEffect(() => {
@@ -191,7 +196,25 @@ const Navbar = () => {
                         </div>
                     )}
                 </div>
+
+                <div className="nav-auth">
+                    {user ? (
+                        <div className="nav-user-dropdown">
+                            <span className="nav-user-email">
+                                <User size={18} /> {user.email.split('@')[0]}
+                            </span>
+                            <button onClick={logout} className="nav-logout-btn" title="Đăng xuất">
+                                <LogOut size={18} />
+                            </button>
+                        </div>
+                    ) : (
+                        <button className="nav-login-btn" onClick={() => setIsAuthModalOpen(true)}>
+                            Đăng Nhập
+                        </button>
+                    )}
+                </div>
             </div>
+            <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
         </nav>
     );
 };

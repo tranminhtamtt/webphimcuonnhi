@@ -6,6 +6,7 @@ import { OPHIM_BASE_URL } from '../config';
 import HeroBanner from '../components/HeroBanner';
 import MovieSection from '../components/MovieSection';
 import SidebarRanking from '../components/SidebarRanking';
+import ContinueWatching from '../components/ContinueWatching';
 
 const HomePage = () => {
     const [searchParams] = useSearchParams();
@@ -169,6 +170,7 @@ const HomePage = () => {
             
             <div className="homepage-content-wrapper">
                 <div className="main-content">
+                    <ContinueWatching />
                     <MovieSection 
                         title="Phim Lẻ Mới" 
                         movies={usMovies.items} 

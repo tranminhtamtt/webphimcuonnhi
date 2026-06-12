@@ -1,0 +1,102 @@
+.continue-watching-section {
+    margin-bottom: 40px;
+}
+
+.cw-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.cw-card {
+    background-color: #1e293b;
+    border-radius: 8px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.cw-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.cw-img-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+}
+
+.cw-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cw-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.cw-card:hover .cw-overlay {
+    opacity: 1;
+}
+
+.cw-play-icon {
+    color: white;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.cw-progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.cw-progress-fill {
+    height: 100%;
+    background-color: #a855f7;
+    transition: width 0.3s;
+}
+
+.cw-info {
+    padding: 12px;
+}
+
+.cw-info h3 {
+    margin: 0 0 8px 0;
+    color: white;
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cw-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.cw-ep {
+    color: #38bdf8;
+    font-weight: 500;
+}

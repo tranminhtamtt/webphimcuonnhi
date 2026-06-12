@@ -290,3 +290,56 @@
         right: 0;
     }
 }
+
+.nav-auth {
+    margin-left: 20px;
+}
+
+.nav-login-btn {
+    background-color: #38bdf8;
+    color: #111827;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+
+.nav-login-btn:hover {
+    background-color: #0ea5e9;
+}
+
+.nav-user-dropdown {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-user-email {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #cbd5e1;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.nav-logout-btn {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: none;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.nav-logout-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+}

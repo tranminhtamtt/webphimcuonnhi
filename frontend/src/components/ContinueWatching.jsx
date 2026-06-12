@@ -48,7 +48,7 @@ const ContinueWatching = () => {
                     
                     return (
                         <Link 
-                            to={`/xem-phim/${item.movieSlug}/${encodeURIComponent(item.episodeName)}`} 
+                            to={`/phim/${item.movieSlug}`} 
                             className="cw-card" 
                             key={item.id}
                         >

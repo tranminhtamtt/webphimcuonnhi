@@ -11,8 +11,9 @@ const DetailPage = () => {
     const navigate = useNavigate();
     const [movieData, setMovieData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [isFavorite, setIsFavorite] = useState(false);
-    const { token } = useContext(AuthContext);
+    const { token, favoritesList, toggleFavorite } = useContext(AuthContext);
+
+    const isFavorite = favoritesList.some(f => f.movieSlug === slug);
 
     useEffect(() => {
         const fetchMovieDetail = async () => {
@@ -28,39 +29,16 @@ const DetailPage = () => {
             }
         };
 
-        const checkFavorite = async () => {
-            if (!token) return;
-            try {
-                const response = await axios.get(`${BACKEND_URL}/favorites/check/${slug}`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                setIsFavorite(response.data.isFavorite);
-            } catch (error) {
-                console.error("Error checking favorite:", error);
-            }
-        };
-
         fetchMovieDetail();
-        checkFavorite();
     }, [slug, token]);
 
     const handleToggleFavorite = async () => {
-        if (!token) {
-            alert('Vui lòng đăng nhập để thêm vào danh sách yêu thích!');
-            return;
-        }
-        try {
-            const response = await axios.post(`${BACKEND_URL}/favorites/toggle`, {
-                movieSlug: slug,
-                movieName: movieData.movie.name,
-                posterUrl: movieData.movie.poster_url || movieData.movie.thumb_url
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setIsFavorite(response.data.isFavorite);
-        } catch (error) {
-            console.error("Error toggling favorite:", error);
-        }
+        if (!movieData?.movie) return;
+        await toggleFavorite({
+            slug: slug,
+            name: movieData.movie.name,
+            poster_url: movieData.movie.poster_url || movieData.movie.thumb_url
+        });
     };
 
     if (loading) {

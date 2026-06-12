@@ -95,7 +95,7 @@ const UserLibraryPage = () => {
                             watchingList.map(item => {
                                 const progressPercent = item.duration > 0 ? (item.currentTime / item.duration) * 100 : 0;
                                 return (
-                                    <Link to={`/xem-phim/${item.movieSlug}/${encodeURIComponent(item.episodeName)}`} key={item.id} className="library-card">
+                                    <Link to={`/phim/${item.movieSlug}`} key={item.id} className="library-card">
                                         <div className="card-img-wrapper">
                                             <img src={item.posterUrl || '/placeholder.png'} alt={item.movieName} />
                                             <div className="card-overlay">
@@ -108,7 +108,7 @@ const UserLibraryPage = () => {
                                         <div className="card-info">
                                             <h3>{item.movieName}</h3>
                                             <p className="episode-badge">Tập {item.episodeName}</p>
-                                            <p className="time-info">Đang xem: {formatTime(item.currentTime)} / {formatTime(item.duration)}</p>
+                                            <p className="time-info">Đã xem: {formatTime(item.currentTime)} / {formatTime(item.duration)}</p>
                                         </div>
                                     </Link>
                                 );

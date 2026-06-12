@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useSearchParams, Link } from 'react-router-dom';
+import { Heart } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
 import './HomePage.css';
 import { OPHIM_BASE_URL } from '../config';
 import HeroBanner from '../components/HeroBanner';
@@ -14,6 +16,8 @@ const HomePage = () => {
     const categoryQuery = searchParams.get('category');
     const countryQuery = searchParams.get('country');
     const listQuery = searchParams.get('list');
+
+    const { favoritesList, toggleFavorite } = useContext(AuthContext);
 
     const [loading, setLoading] = useState(true);
     
@@ -138,20 +142,40 @@ const HomePage = () => {
                     <div style={{ margin: '40px', color: '#94a3b8' }}>Không tìm thấy phim nào.</div>
                 ) : (
                     <div className="movies-grid" style={{ padding: '20px 40px' }}>
-                        {genericMovies.items.map(movie => (
-                            <Link to={`/phim/${movie.slug}`} className="movie-card" key={movie._id}>
-                                <div className="card-img-wrapper">
-                                    <img 
-                                        src={movie.thumb_url?.startsWith('http') ? movie.thumb_url : `${genericMovies.pathImage}${movie.thumb_url}`} 
-                                        alt={movie.name} 
-                                        className="movie-image"
-                                    />
+                        {genericMovies.items.map(movie => {
+                            const isFav = favoritesList.some(f => f.movieSlug === movie.slug);
+                            return (
+                                <div key={movie._id} className="movie-card-container" style={{ position: 'relative' }}>
+                                    <Link to={`/phim/${movie.slug}`} className="movie-card">
+                                        <div className="card-img-wrapper">
+                                            <img 
+                                                src={movie.thumb_url?.startsWith('http') ? movie.thumb_url : `${genericMovies.pathImage}${movie.thumb_url}`} 
+                                                alt={movie.name} 
+                                                className="movie-image"
+                                            />
+                                        </div>
+                                        <div className="movie-info">
+                                            <h3 className="movie-name">{movie.name}</h3>
+                                        </div>
+                                    </Link>
+                                    <button 
+                                        className={`quick-fav-btn ${isFav ? 'active' : ''}`}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            toggleFavorite({
+                                                slug: movie.slug,
+                                                name: movie.name,
+                                                thumb_url: movie.thumb_url
+                                            });
+                                        }}
+                                        title={isFav ? "Bỏ yêu thích" : "Yêu thích"}
+                                    >
+                                        <Heart size={18} fill={isFav ? "currentColor" : "none"} />
+                                    </button>
                                 </div>
-                                <div className="movie-info">
-                                    <h3 className="movie-name">{movie.name}</h3>
-                                </div>
-                            </Link>
-                        ))}
+                            );
+                        })}
                     </div>
                 )}
             </div>

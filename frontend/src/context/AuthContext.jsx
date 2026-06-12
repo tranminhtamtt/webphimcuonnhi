@@ -7,6 +7,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(localStorage.getItem('token') || null);
+    const [favoritesList, setFavoritesList] = useState([]);
 
     useEffect(() => {
         if (token) {
@@ -25,9 +26,18 @@ export const AuthProvider = ({ children }) => {
                 console.error("Invalid token");
                 logout();
             }
+
+            // Fetch favorites
+            axios.get(`${BACKEND_URL}/favorites`, {
+                headers: { Authorization: `Bearer ${token}` }
+            }).then(res => {
+                setFavoritesList(res.data);
+            }).catch(err => console.error("Error fetching favorites", err));
+
         } else {
             localStorage.removeItem('token');
             setUser(null);
+            setFavoritesList([]);
         }
     }, [token]);
 
@@ -46,10 +56,37 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         setToken(null);
         setUser(null);
+        setFavoritesList([]);
+    };
+
+    const toggleFavorite = async (movie) => {
+        if (!token) {
+            alert('Vui lòng đăng nhập để sử dụng tính năng này!');
+            return false;
+        }
+        try {
+            const response = await axios.post(`${BACKEND_URL}/favorites/toggle`, {
+                movieSlug: movie.slug,
+                movieName: movie.name,
+                posterUrl: movie.poster_url || movie.thumb_url
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            
+            if (response.data.isFavorite) {
+                setFavoritesList(prev => [...prev, { movieSlug: movie.slug, movieName: movie.name, posterUrl: movie.poster_url || movie.thumb_url }]);
+            } else {
+                setFavoritesList(prev => prev.filter(f => f.movieSlug !== movie.slug));
+            }
+            return response.data.isFavorite;
+        } catch (error) {
+            console.error("Error toggling favorite:", error);
+            return null;
+        }
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, login, register, logout }}>
+        <AuthContext.Provider value={{ user, token, login, register, logout, favoritesList, toggleFavorite }}>
             {children}
         </AuthContext.Provider>
     );

@@ -215,7 +215,7 @@ const MovieCanvas = ({ movies, pathImage }) => {
           pointerEvents: 'none',
         }}></div>
 
-        <Canvas camera={{ position: [0, 0, 20], fov: 45 }}>
+        <Canvas camera={{ position: [0, 0, 20], fov: 45 }} dpr={[1, 1.5]}>
           {/* <color attach="background" args={['#050505']} /> Removed to show HTML background */}
           <ambientLight intensity={0.8} />
           <directionalLight position={[10, 10, 5]} intensity={1.5} />
@@ -224,7 +224,7 @@ const MovieCanvas = ({ movies, pathImage }) => {
 
           <MouseParallax />
 
-          <ContactShadows position={[0, -3.5, 0]} opacity={0.6} scale={30} blur={2.5} far={5} />
+          <ContactShadows position={[0, -3.5, 0]} opacity={0.4} scale={30} blur={2.5} far={5} resolution={256} frames={1} />
           <Environment preset="city" />
         </Canvas>
       </div>

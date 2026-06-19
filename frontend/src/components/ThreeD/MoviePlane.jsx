@@ -166,7 +166,7 @@ const MoviePlane = ({ movie, pathImage, position, rotation, onHover, onUnhover }
         navigate(`/phim/${movie.slug}`);
       }}
     >
-      <planeGeometry args={[2.5, 3.75, 64, 64]} />
+      <planeGeometry args={[2.5, 3.75, 16, 16]} />
       <shaderMaterial
         ref={materialRef}
         vertexShader={vertexShader}

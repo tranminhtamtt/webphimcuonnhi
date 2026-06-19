@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { PlayCircle, Heart } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
+import TiltCard from './TiltCard';
 import './MovieSection.css';
 
 const MovieSection = ({ title, movies, pathImage, titleColor = '#38bdf8', viewAllLink }) => {
@@ -26,7 +27,7 @@ const MovieSection = ({ title, movies, pathImage, titleColor = '#38bdf8', viewAl
                 {movies.map(movie => {
                     const isFav = favoritesList.some(f => f.movieSlug === movie.slug);
                     return (
-                        <div key={movie._id || movie.slug} className="movie-card-container" style={{ position: 'relative' }}>
+                        <TiltCard key={movie._id || movie.slug} className="movie-card-container" style={{ position: 'relative' }}>
                             <Link to={`/phim/${movie.slug}`} className="movie-card">
                                 <div className="movie-image-wrapper">
                                     <img 
@@ -47,7 +48,7 @@ const MovieSection = ({ title, movies, pathImage, titleColor = '#38bdf8', viewAl
                                         {movie.episode_current || movie.year}
                                     </div>
                                 </div>
-                                <div className="movie-card-info">
+                                <div className="movie-card-info" style={{ transform: "translateZ(30px)" }}>
                                     <h3>{movie.name}</h3>
                                     <p>{movie.origin_name}</p>
                                 </div>
@@ -67,7 +68,7 @@ const MovieSection = ({ title, movies, pathImage, titleColor = '#38bdf8', viewAl
                             >
                                 <Heart size={18} fill={isFav ? "currentColor" : "none"} />
                             </button>
-                        </div>
+                        </TiltCard>
                     );
                 })}
             </div>

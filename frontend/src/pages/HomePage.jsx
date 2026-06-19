@@ -6,6 +6,7 @@ import { AuthContext } from '../context/AuthContext';
 import './HomePage.css';
 import { OPHIM_BASE_URL } from '../config';
 import HeroBanner from '../components/HeroBanner';
+import MovieCanvas from '../components/ThreeD/MovieCanvas';
 import MovieSection from '../components/MovieSection';
 import SidebarRanking from '../components/SidebarRanking';
 import ContinueWatching from '../components/ContinueWatching';
@@ -186,7 +187,7 @@ const HomePage = () => {
     return (
         <div className="homepage">
             {newMovies.items.length > 0 && (
-                <HeroBanner 
+                <MovieCanvas 
                     movies={newMovies.items.slice(0, 10)} 
                     pathImage={newMovies.pathImage} 
                 />

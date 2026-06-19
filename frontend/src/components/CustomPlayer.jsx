@@ -14,10 +14,15 @@ const CustomPlayer = ({ src, poster, onTimeUpdate, initialTime }) => {
     const [seekIndicator, setSeekIndicator] = useState({ show: false, text: '' });
     const indicatorTimeout = useRef(null);
 
+    const onTimeUpdateRef = useRef(onTimeUpdate);
+
+    useEffect(() => {
+        onTimeUpdateRef.current = onTimeUpdate;
+    }, [onTimeUpdate]);
+
     useEffect(() => {
         initialTimeRef.current = initialTime;
         if (initialTime > 0 && videoRef.current && videoRef.current.readyState >= 1) {
-            // Nếu video đã load xong metadata nhưng API trả về delay, ta tua ngay lập tức
             if (videoRef.current.currentTime < initialTime) {
                 videoRef.current.currentTime = initialTime;
             }
@@ -45,10 +50,7 @@ const CustomPlayer = ({ src, poster, onTimeUpdate, initialTime }) => {
             hls.attachMedia(video);
             
             hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
-                // Get strictly true resolutions from API stream
                 let availableQualities = hls.levels.map((l) => l.height).filter(h => h && h > 0);
-                
-                // Remove duplicates and sort descending
                 availableQualities = [...new Set(availableQualities)].sort((a, b) => b - a);
 
                 player = new Plyr(video, {
@@ -69,12 +71,14 @@ const CustomPlayer = ({ src, poster, onTimeUpdate, initialTime }) => {
                 });
             });
         } else if (video.canPlayType('application/vnd.apple.mpegurl') && src) {
-            // Safari support
+            video.src = src;
+            player = new Plyr(video, defaultOptions);
+        } else if (src) {
+            // Fallback for mp4
             video.src = src;
             player = new Plyr(video, defaultOptions);
         }
 
-        // Set initial time if provided
         const handleLoadedMetadata = () => {
             if (initialTimeRef.current > 0) {
                 video.currentTime = initialTimeRef.current;
@@ -82,8 +86,8 @@ const CustomPlayer = ({ src, poster, onTimeUpdate, initialTime }) => {
         };
 
         const handleTimeUpdate = () => {
-            if (onTimeUpdate) {
-                onTimeUpdate(video.currentTime, video.duration);
+            if (onTimeUpdateRef.current) {
+                onTimeUpdateRef.current(video.currentTime, video.duration);
             }
         };
 
@@ -96,7 +100,7 @@ const CustomPlayer = ({ src, poster, onTimeUpdate, initialTime }) => {
             if (hls) hls.destroy();
             if (player) player.destroy();
         };
-    }, [src, onTimeUpdate]); // added onTimeUpdate to dependencies just in case
+    }, [src]);
 
     // Intercept keyboard events for progressive seeking
     useEffect(() => {

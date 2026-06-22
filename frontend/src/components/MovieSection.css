@@ -58,6 +58,14 @@
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+.movie-card:nth-child(odd) {
+    border-radius: 40px 12px 12px 12px;
+}
+
+.movie-card:nth-child(even) {
+    border-radius: 12px 40px 12px 12px;
+}
+
 .movie-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
@@ -112,16 +120,20 @@
 
 .movie-badge {
     position: absolute;
-    top: 5px;
-    left: 5px;
-    background: #e50914;
-    color: white;
-    padding: 3px 6px;
-    border-radius: 4px;
-    font-size: 0.75rem;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(4px);
+    color: #fbbf24;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
     font-weight: 700;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
     z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .movie-card-info {

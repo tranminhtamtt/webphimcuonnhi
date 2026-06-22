@@ -72,7 +72,7 @@
 .slider-card {
     flex: 0 0 auto;
     background: #1e293b;
-    border-radius: 40px 12px 12px 12px;
+    border-radius: 8px;
     overflow: hidden;
     text-decoration: none;
     transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);

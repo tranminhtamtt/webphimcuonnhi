@@ -21,7 +21,7 @@ const MovieSlider = ({ title, movies, pathImage, isVertical = false, titleColor 
     return (
         <div className={`movie-slider-section ${isVertical ? 'slider-vertical' : 'slider-horizontal'}`}>
             <h2 className="slider-title" style={{ color: titleColor }}>{title}</h2>
-            
+
             <div className="slider-container">
                 <button className="slider-btn left" onClick={() => scroll('left')}>
                     <ChevronLeft size={40} />
@@ -31,17 +31,17 @@ const MovieSlider = ({ title, movies, pathImage, isVertical = false, titleColor 
                     {movies.map(movie => (
                         <Link to={`/phim/${movie.slug}`} className="slider-card" key={movie._id || movie.slug}>
                             <div className="slider-image-wrapper">
-                                <img 
+                                <img
                                     src={
-                                        isVertical 
-                                        ? (movie.poster_url?.startsWith('http') ? movie.poster_url : `${pathImage}${movie.poster_url}`)
-                                        : (movie.thumb_url?.startsWith('http') ? movie.thumb_url : `${pathImage}${movie.thumb_url}`)
-                                    } 
-                                    alt={movie.name} 
+                                        isVertical
+                                            ? (movie.poster_url?.startsWith('http') ? movie.poster_url : `${pathImage}${movie.poster_url}`)
+                                            : (movie.thumb_url?.startsWith('http') ? movie.thumb_url : `${pathImage}${movie.thumb_url}`)
+                                    }
+                                    alt={movie.name}
                                     className="slider-image"
                                     onError={(e) => {
                                         // Fallback to whichever is available
-                                        e.target.onerror = null; 
+                                        e.target.onerror = null;
                                         e.target.src = isVertical
                                             ? (movie.thumb_url?.startsWith('http') ? movie.thumb_url : `${pathImage}${movie.thumb_url}`)
                                             : (movie.poster_url?.startsWith('http') ? movie.poster_url : `${pathImage}${movie.poster_url}`);

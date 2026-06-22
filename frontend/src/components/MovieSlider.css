@@ -47,12 +47,12 @@
 
 .slider-btn.left {
     left: 0;
-    background: linear-gradient(to right, rgba(20,20,20,1) 0%, rgba(20,20,20,0) 100%);
+    background: linear-gradient(to right, rgba(20, 20, 20, 1) 0%, rgba(20, 20, 20, 0) 100%);
 }
 
 .slider-btn.right {
     right: 0;
-    background: linear-gradient(to left, rgba(20,20,20,1) 0%, rgba(20,20,20,0) 100%);
+    background: linear-gradient(to left, rgba(20, 20, 20, 1) 0%, rgba(20, 20, 20, 0) 100%);
 }
 
 .slider-track {
@@ -60,7 +60,8 @@
     gap: 15px;
     overflow-x: auto;
     scroll-behavior: smooth;
-    padding: 10px 40px 30px 40px; /* bottom padding for hover scale */
+    padding: 10px 40px 30px 40px;
+    /* bottom padding for hover scale */
     scrollbar-width: none;
 }
 
@@ -71,7 +72,7 @@
 .slider-card {
     flex: 0 0 auto;
     background: #1e293b;
-    border-radius: 8px;
+    border-radius: 40px 12px 12px 12px;
     overflow: hidden;
     text-decoration: none;
     transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -83,6 +84,7 @@
 .slider-horizontal .slider-card {
     width: 280px;
 }
+
 .slider-horizontal .slider-image-wrapper {
     aspect-ratio: 16/9;
 }
@@ -91,6 +93,7 @@
 .slider-vertical .slider-card {
     width: 180px;
 }
+
 .slider-vertical .slider-image-wrapper {
     aspect-ratio: 2/3;
 }
@@ -145,13 +148,14 @@
     position: absolute;
     top: 8px;
     right: 8px;
-    background: #e50914; /* Netflix Red */
+    background: #e50914;
+    /* Netflix Red */
     color: white;
     padding: 2px 6px;
     border-radius: 4px;
     font-size: 0.75rem;
     font-weight: 700;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .slider-info {
@@ -173,16 +177,20 @@
     .slider-title {
         padding-left: 20px;
     }
+
     .slider-track {
         padding: 10px 20px 20px 20px;
         gap: 10px;
     }
+
     .slider-horizontal .slider-card {
         width: 220px;
     }
+
     .slider-vertical .slider-card {
         width: 140px;
     }
+
     .slider-btn {
         display: none;
     }
@@ -193,15 +201,19 @@
         font-size: 1.1rem;
         padding-left: 15px;
     }
+
     .slider-track {
         padding: 10px 15px 20px 15px;
     }
+
     .slider-horizontal .slider-card {
         width: 160px;
     }
+
     .slider-vertical .slider-card {
         width: 110px;
     }
+
     .slider-info h3 {
         font-size: 0.85rem;
     }

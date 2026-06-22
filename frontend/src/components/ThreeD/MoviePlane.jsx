@@ -66,6 +66,26 @@ void main() {
   vec3 bgColor = vec3(0.008, 0.024, 0.090); // Màu #020617 (Slate blue dark)
   color.rgb = mix(color.rgb, bgColor, depthFade * 0.95);
   
+  // Bo góc (Rounded corners)
+  vec2 size = vec2(2.5, 3.75);
+  vec2 pos = (uv - 0.5) * size;
+  
+  // Bán kính bo góc bất đối xứng (Top-Left to, còn lại nhỏ)
+  float rTopLeft = 0.6;
+  float rTopRight = 0.15;
+  float rBottomRight = 0.15;
+  float rBottomLeft = 0.15;
+  
+  float r = (pos.x > 0.0) 
+            ? ((pos.y > 0.0) ? rTopRight : rBottomRight) 
+            : ((pos.y > 0.0) ? rTopLeft : rBottomLeft);
+            
+  vec2 bounds = (size * 0.5) - r;
+  float d = length(max(abs(pos) - bounds, 0.0)) - r;
+  float alpha = 1.0 - smoothstep(0.0, 0.03, d);
+  
+  color.a *= alpha;
+  
   gl_FragColor = color;
 }
 `;
@@ -78,7 +98,7 @@ const MoviePlane = ({ movie, pathImage, position, rotation, onHover, onUnhover }
   const [texture, setTexture] = useState(null);
 
   const imageUrl = movie.thumb_url?.startsWith('http') ? movie.thumb_url : `${pathImage}${movie.thumb_url}`;
-  
+
   useEffect(() => {
     const loader = new THREE.TextureLoader();
     loader.setCrossOrigin('anonymous');
@@ -92,7 +112,7 @@ const MoviePlane = ({ movie, pathImage, position, rotation, onHover, onUnhover }
         console.error("Lỗi tải ảnh:", err);
         // Ảnh mặc định nếu lỗi
         loader.load('https://via.placeholder.com/300x400?text=No+Image', (fbTex) => {
-            setTexture(fbTex);
+          setTexture(fbTex);
         });
       }
     );
@@ -108,10 +128,10 @@ const MoviePlane = ({ movie, pathImage, position, rotation, onHover, onUnhover }
   useFrame((state, delta) => {
     if (materialRef.current) {
       if (texture) {
-          materialRef.current.uniforms.uTexture.value = texture;
+        materialRef.current.uniforms.uTexture.value = texture;
       }
       materialRef.current.uniforms.uTime.value += delta;
-      
+
       const targetHover = hovered ? 1 : 0;
       materialRef.current.uniforms.uHover.value = THREE.MathUtils.lerp(
         materialRef.current.uniforms.uHover.value,
@@ -129,7 +149,7 @@ const MoviePlane = ({ movie, pathImage, position, rotation, onHover, onUnhover }
   if (!texture) return null; // Không hiển thị gì cho đến khi tải ảnh xong
 
   return (
-    <mesh 
+    <mesh
       ref={meshRef}
       position={position}
       rotation={rotation}
@@ -175,6 +195,29 @@ const MoviePlane = ({ movie, pathImage, position, rotation, onHover, onUnhover }
         transparent={true}
         side={THREE.DoubleSide}
       />
+      <Html 
+        position={[0.7, -1.45, 0.01]} 
+        transform 
+        distanceFactor={10}
+        style={{ pointerEvents: 'none' }}
+      >
+        <div style={{
+          background: 'rgba(15, 23, 42, 0.85)',
+          backdropFilter: 'blur(4px)',
+          color: '#fbbf24',
+          padding: '4px 10px',
+          borderRadius: '12px',
+          fontSize: '11px',
+          fontWeight: 'bold',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '4px',
+          boxShadow: '0 4px 6px rgba(0,0,0,0.5)',
+          fontFamily: 'sans-serif'
+        }}>
+           {movie.episode_current || movie.year || '4.5'}
+        </div>
+      </Html>
     </mesh>
   );
 };

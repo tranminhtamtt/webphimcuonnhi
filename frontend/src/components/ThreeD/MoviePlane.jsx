@@ -81,10 +81,10 @@ void main() {
   float sy = step(0.0, pos.y);
   float rTop = mix(rTopLeft, rTopRight, sx);
   float rBottom = mix(rBottomLeft, rBottomRight, sx);
-  float r = mix(rBottom, rTop, sy);
+  float cornerRadius = mix(rBottom, rTop, sy);
             
-  vec2 bounds = (size * 0.5) - r;
-  float d = length(max(abs(pos) - bounds, 0.0)) - r;
+  vec2 bounds = (size * 0.5) - cornerRadius;
+  float d = length(max(abs(pos) - bounds, 0.0)) - cornerRadius;
   float alpha = 1.0 - smoothstep(0.0, 0.03, d);
   
   color.a *= alpha;

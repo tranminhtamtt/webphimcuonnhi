@@ -96,6 +96,7 @@ void main() {
 const MoviePlane = ({ movie, pathImage, position, rotation, onHover, onUnhover }) => {
   const meshRef = useRef();
   const materialRef = useRef();
+  const badgeRef = useRef();
   const [hovered, setHovered] = useState(false);
   const navigate = useNavigate();
   const [texture, setTexture] = useState(null);
@@ -141,6 +142,18 @@ const MoviePlane = ({ movie, pathImage, position, rotation, onHover, onUnhover }
         targetHover,
         0.1
       );
+    }
+    
+    if (meshRef.current && badgeRef.current) {
+      const worldPos = new THREE.Vector3();
+      meshRef.current.getWorldPosition(worldPos);
+      
+      // Đồng bộ độ mờ của badge với depthFade của shader (từ z=4.0 đến z=-6.0)
+      const t = THREE.MathUtils.clamp((worldPos.z - (-6.0)) / (4.0 - (-6.0)), 0.0, 1.0);
+      const alpha = t * t * (3.0 - 2.0 * t); // smoothstep
+      
+      badgeRef.current.style.opacity = alpha;
+      badgeRef.current.style.pointerEvents = alpha < 0.1 ? 'none' : 'auto';
     }
   });
 
@@ -204,7 +217,7 @@ const MoviePlane = ({ movie, pathImage, position, rotation, onHover, onUnhover }
         distanceFactor={10}
         style={{ pointerEvents: 'none' }}
       >
-        <div style={{
+        <div ref={badgeRef} style={{
           background: 'rgba(15, 23, 42, 0.85)',
           backdropFilter: 'blur(4px)',
           color: '#fbbf24',
@@ -216,7 +229,8 @@ const MoviePlane = ({ movie, pathImage, position, rotation, onHover, onUnhover }
           alignItems: 'center',
           gap: '4px',
           boxShadow: '0 4px 6px rgba(0,0,0,0.5)',
-          fontFamily: 'sans-serif'
+          fontFamily: 'sans-serif',
+          transition: 'opacity 0.1s ease'
         }}>
            {movie.episode_current || movie.year || '4.5'}
         </div>

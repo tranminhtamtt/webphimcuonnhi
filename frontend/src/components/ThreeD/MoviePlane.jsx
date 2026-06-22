@@ -2,6 +2,7 @@ import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useNavigate } from 'react-router-dom';
+import { Html } from '@react-three/drei';
 
 const vertexShader = `
 uniform float uHover;

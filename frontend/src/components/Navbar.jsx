@@ -84,7 +84,7 @@ const Navbar = () => {
                     const response = await axios.get(`${OPHIM_BASE_URL}/v1/api/tim-kiem?keyword=${searchInput.trim()}&page=1`);
                     if (response.data && response.data.status === 'success') {
                         setSearchResults(response.data.data.items.slice(0, 5)); // Show top 5
-                        setPathImage(response.data.data.APP_DOMAIN_CDN_IMAGE + '/uploads/movies/');
+                        setPathImage(response.data.data.APP_DOMAIN_CDN_IMAGE + '/');
                     } else {
                         setSearchResults([]);
                     }

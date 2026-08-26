@@ -51,7 +51,7 @@ const HomePage = () => {
             if (isV1Api && response.data?.status === 'success') {
                 return {
                     items: filterMovies(response.data.data.items),
-                    pathImage: response.data.data.APP_DOMAIN_CDN_IMAGE + '/uploads/movies/'
+                    pathImage: response.data.data.APP_DOMAIN_CDN_IMAGE + '/'
                 };
             } else if (!isV1Api && response.data?.status) {
                 return {

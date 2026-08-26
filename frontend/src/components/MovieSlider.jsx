@@ -38,13 +38,15 @@ const MovieSlider = ({ title, movies, pathImage, isVertical = false, titleColor 
                                             : (movie.thumb_url?.startsWith('http') ? movie.thumb_url : `${pathImage}${movie.thumb_url}`)
                                     }
                                     alt={movie.name}
-                                    className="slider-image"
+                                    className={isVertical ? "slider-img-vertical" : "slider-img"}
+                                    loading="lazy"
                                     onError={(e) => {
-                                        // Fallback to whichever is available
                                         e.target.onerror = null;
-                                        e.target.src = isVertical
+                                        const fallback = isVertical 
                                             ? (movie.thumb_url?.startsWith('http') ? movie.thumb_url : `${pathImage}${movie.thumb_url}`)
                                             : (movie.poster_url?.startsWith('http') ? movie.poster_url : `${pathImage}${movie.poster_url}`);
+                                        e.target.src = fallback && !fallback.includes('undefined') ? fallback : '/placeholder.png';
+                                        e.target.onerror = (e2) => { e2.target.onerror = null; e2.target.src = '/placeholder.png'; };
                                     }}
                                 />
                                 <div className="slider-overlay">

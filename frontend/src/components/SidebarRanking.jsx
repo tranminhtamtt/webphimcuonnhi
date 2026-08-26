@@ -23,8 +23,10 @@ const SidebarRanking = ({ title, movies, pathImage, titleColor = '#facc15' }) =>
                                 alt={movie.name} 
                                 className="ranking-img"
                                 onError={(e) => {
-                                    e.target.onerror = null; 
-                                    e.target.src = movie.poster_url?.startsWith('http') ? movie.poster_url : `${pathImage}${movie.poster_url}`;
+                                    e.target.onerror = null;
+                                    const fallback = movie.poster_url?.startsWith('http') ? movie.poster_url : `${pathImage}${movie.poster_url}`;
+                                    e.target.src = fallback && !fallback.includes('undefined') ? fallback : '/placeholder.png';
+                                    e.target.onerror = (e2) => { e2.target.onerror = null; e2.target.src = '/placeholder.png'; };
                                 }}
                             />
                         </div>

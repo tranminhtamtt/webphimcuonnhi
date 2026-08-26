@@ -56,7 +56,7 @@ const HomePage = () => {
             } else if (!isV1Api && response.data?.status) {
                 return {
                     items: filterMovies(response.data.items),
-                    pathImage: response.data.pathImage
+                    pathImage: response.data.pathImage || ''
                 };
             }
             return { items: [], pathImage: '' };

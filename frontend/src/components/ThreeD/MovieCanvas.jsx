@@ -178,7 +178,7 @@ const MovieCanvas = ({ movies, pathImage }) => {
         <div style={{
           position: 'absolute',
           top: 0, left: 0, right: 0, bottom: 0,
-          backgroundImage: `url(${pathImage}${activeMovie.thumb_url})`,
+          backgroundImage: `url(${(activeMovie.thumb_url || activeMovie.poster_url)?.startsWith('http') ? '' : (pathImage || '')}${activeMovie.thumb_url || activeMovie.poster_url})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center 30%',
           opacity: hoveredMovie ? 0.6 : 0.3,

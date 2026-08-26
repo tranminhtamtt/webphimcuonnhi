@@ -43,12 +43,12 @@ const HomePage = () => {
         if (ep.includes('đang cập nhật') || ep === 'tập 0' || ep === '0') return false;
         
         return true;
-    }).map(m => ({ ...m, thumb_url: m.thumb_url || m.poster_url, poster_url: m.poster_url || m.thumb_url })) : [];
+    }) : [];
 
     const fetchSection = async (url, isV1Api = true) => {
         try {
             const response = await axios.get(`${OPHIM_BASE_URL}${url}`);
-            if (isV1Api && response.data?.status === 'success') {
+            if (isV1Api && (response.data?.status === 'success' || response.data?.status === true)) {
                 return {
                     items: filterMovies(response.data.data.items),
                     pathImage: response.data.data.APP_DOMAIN_CDN_IMAGE + '/'

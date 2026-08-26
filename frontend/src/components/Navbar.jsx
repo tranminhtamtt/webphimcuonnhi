@@ -82,7 +82,7 @@ const Navbar = () => {
                 setShowResults(true);
                 try {
                     const response = await axios.get(`${OPHIM_BASE_URL}/v1/api/tim-kiem?keyword=${searchInput.trim()}&page=1`);
-                    if (response.data && response.data.status === 'success') {
+                    if (response.data?.status === 'success' || response.data?.status === true) {
                         setSearchResults(response.data.data.items.slice(0, 5).map(m => ({...m, thumb_url: m.thumb_url || m.poster_url, poster_url: m.poster_url || m.thumb_url}))); // Show top 5
                         setPathImage(response.data.data.APP_DOMAIN_CDN_IMAGE + '/');
                     } else {

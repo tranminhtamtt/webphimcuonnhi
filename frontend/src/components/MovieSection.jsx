@@ -31,12 +31,15 @@ const MovieSection = ({ title, movies, pathImage, titleColor = '#38bdf8', viewAl
                             <Link to={`/phim/${movie.slug}`} className="movie-card">
                                 <div className="movie-image-wrapper">
                                     <img 
-                                        src={movie.thumb_url?.startsWith('http') ? movie.thumb_url : `${pathImage}${movie.thumb_url}`} 
+                                        src={movie.poster_url?.startsWith('http') ? movie.poster_url : `${pathImage}${movie.poster_url}`} 
                                         alt={movie.name} 
                                         className="movie-img"
+                                        loading="lazy"
                                         onError={(e) => {
-                                            e.target.onerror = null; 
-                                            e.target.src = movie.poster_url?.startsWith('http') ? movie.poster_url : `${pathImage}${movie.poster_url}`;
+                                            e.target.onerror = null;
+                                            const fallback = movie.thumb_url?.startsWith('http') ? movie.thumb_url : `${pathImage}${movie.thumb_url}`;
+                                            e.target.src = fallback && !fallback.includes('undefined') ? fallback : '/placeholder.png';
+                                            e.target.onerror = (e2) => { e2.target.onerror = null; e2.target.src = '/placeholder.png'; };
                                         }}
                                     />
                                     <div className="movie-overlay">
